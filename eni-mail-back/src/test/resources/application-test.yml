@@ -1,0 +1,27 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/eni_mail_test
+
+app:
+  jwt:
+    secret: test-secret-at-least-32-bytes-long-for-hs256-ok
+    access-token-ttl-minutes: 15
+    refresh-token-ttl-days: 7
+  cors:
+    allowed-origins:
+      - http://localhost:5173
+  attachments:
+    storage-path: ./target/test-uploads
+  security:
+    login-max-attempts: 5
+    login-lockout-minutes: 15
+  admin-seed:
+    email: test-admin@eni.mg
+    password: Test@2026!
+    firstName: Test
+    lastName: Admin
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: WARN

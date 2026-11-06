@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: eni-mail
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 30MB
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: UTC
+
+server:
+  # Port 8080 is often taken by Oracle/EDB/Jenkins/… on dev machines.
+  # 8088 is the working default; override via env SERVER_PORT when needed.
+  port: ${SERVER_PORT:8089}
+  servlet:
+    context-path: /
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
+  jwt:
+    secret: ${JWT_SECRET:change-me-please-use-a-32-byte-secret-at-least}
+    access-token-ttl-minutes: ${JWT_ACCESS_TTL_MIN:15}
+    refresh-token-ttl-days: ${JWT_REFRESH_TTL_DAYS:7}
+    issuer: eni-mail
+  attachments:
+    storage-path: ${ATTACHMENTS_PATH:./data/uploads}
+    max-file-size-bytes: 5242880
+    allowed-content-types:
+      - image/png
+      - image/jpeg
+      - image/gif
+      - image/webp
+      - application/pdf
+      - application/msword
+      - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+      - application/vnd.ms-excel
+      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      - application/vnd.ms-powerpoint
+      - application/vnd.openxmlformats-officedocument.presentationml.presentation
+      - text/plain
+      - text/csv
+      - application/zip
+  security:
+    login-max-attempts: 5
+    login-lockout-minutes: 15
+  admin-seed:
+    email: ${SEED_ADMIN_EMAIL:admin@eni.mg}
+    password: ${SEED_ADMIN_PASSWORD:Admin@2026!}
+    firstName: Admin
+    lastName: ENI
+
+logging:
+  level:
+    root: INFO
+    mg.eni.email: DEBUG
+    org.springframework.security: INFO

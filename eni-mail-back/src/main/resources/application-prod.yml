@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      auto-index-creation: true
+  devtools:
+    restart:
+      enabled: false
+
+logging:
+  level:
+    root: INFO
+    mg.eni.email: INFO

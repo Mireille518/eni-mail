@@ -1,0 +1,29 @@
+# === ENI Mail — racine du projet ===
+
+# Node (frontend)
+node_modules/
+dist/
+
+# Maven (backend)
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Secrets & env
+.env
+.env.*.local
+
+# Uploads locaux
+data/
+uploads/
+
+# OS
+Thumbs.db

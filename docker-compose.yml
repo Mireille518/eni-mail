@@ -1,0 +1,35 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: eni-mail-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Pour une utilisation en developpement local, aucune authentification n'est
+    # activee (mongodb://localhost:27017/eni_mail_dev). Pour la production,
+    # ajoutez MONGO_INITDB_ROOT_USERNAME/PASSWORD et mettez a jour MONGODB_URI
+    # dans le .env du backend (authSource=admin).
+
+  mongo-express:
+    image: mongo-express:1-20
+    container_name: eni-mail-mongo-express
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+
+volumes:
+  mongo_data:
