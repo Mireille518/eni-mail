@@ -17,18 +17,22 @@
     "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     monospace;
 
-  /* ENI Mail - palette bordeaux alignee sur le logo officiel.
-     Teinte oklch(_, _, 25deg) = rouge-bordeaux chaud. */
-  --color-brand-50:  oklch(97% 0.015 25);
-  --color-brand-100: oklch(94% 0.03 25);
-  --color-brand-200: oklch(88% 0.06 25);
-  --color-brand-300: oklch(79% 0.11 25);
-  --color-brand-400: oklch(68% 0.16 25);
-  --color-brand-500: oklch(58% 0.18 25);
-  --color-brand-600: oklch(50% 0.18 25);
-  --color-brand-700: oklch(42% 0.16 25);
-  --color-brand-800: oklch(34% 0.13 25);
-  --color-brand-900: oklch(26% 0.09 25);
+  /* ENI Mail - palette vert forestier alignee sur le logo officiel.
+     Teinte oklch(_, _, 150deg) = vert naturel et calme. */
+  --color-brand-50:  oklch(97% 0.015 150);
+  --color-brand-100: oklch(94% 0.03 150);
+  --color-brand-200: oklch(88% 0.055 150);
+  --color-brand-300: oklch(79% 0.1 150);
+  --color-brand-400: oklch(68% 0.13 150);
+  --color-brand-500: oklch(56% 0.15 150);
+  --color-brand-600: oklch(48% 0.15 150);
+  --color-brand-700: oklch(40% 0.13 150);
+  --color-brand-800: oklch(33% 0.1 150);
+  --color-brand-900: oklch(26% 0.07 150);
+
+  /* Accent secondaire bordeaux (reserve au @ du logo et a certains highlights) */
+  --color-accent-500: oklch(55% 0.17 25);
+  --color-accent-600: oklch(48% 0.17 25);
 
   /* Surface + encre : teinte neutre froide pour un look SaaS pro. */
   --color-surface:        oklch(99% 0.003 250);
@@ -67,7 +71,7 @@
   --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
-  --shadow-ring: 0 0 0 3px oklch(90% 0.06 25 / 0.55);
+  --shadow-ring: 0 0 0 3px oklch(85% 0.06 150 / 0.5);
 }
 
 /* ------------------------------------------------------------------
