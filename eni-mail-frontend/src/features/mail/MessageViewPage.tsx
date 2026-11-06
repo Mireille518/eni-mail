@@ -167,7 +167,7 @@ export function MessageViewPage() {
             </div>
           </div>
         </div>
-        <div className="whitespace-pre-wrap py-4 text-sm leading-relaxed">{message.body}</div>
+        <div className="prose-body max-w-prose py-5">{message.body}</div>
 
         {message.attachments.length > 0 && (
           <section className="border-t pt-4">

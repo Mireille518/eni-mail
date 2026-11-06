@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AlertCircle, Loader2, Mail } from 'lucide-react'
+import { AlertCircle, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
+import { Logo } from '../../components/ui/Logo'
 import { useAuth } from '../../contexts/AuthContext'
 import { apiErrorMessage } from '../../services/apiClient'
 import { useState } from 'react'
@@ -42,41 +43,68 @@ export function LoginPage() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="mb-8 flex items-center justify-center gap-3">
-        <div className="rounded-lg bg-[color:var(--color-brand-600)] p-2 text-white">
-          <Mail className="h-6 w-6" />
-        </div>
-        <div>
-          <div className="text-xl font-semibold">ENI Mail</div>
-          <div className="text-sm text-[color:var(--color-ink-muted)]">Messagerie interne de l'ENI</div>
-        </div>
+      {/* Identite visuelle */}
+      <div className="mb-10 flex flex-col items-center text-center">
+        <Logo size="lg" withWordmark={false} />
+        <h1 className="heading-display mt-4">ENI Mail</h1>
+        <p className="mt-1.5 text-sm text-[color:var(--color-ink-muted)]">
+          Messagerie interne de l'Ecole Nationale d'Informatique
+        </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="card space-y-4 p-6">
-        <h1 className="text-lg font-semibold">Connexion</h1>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="card space-y-4 p-7"
+        noValidate
+      >
+        <div>
+          <h2 className="text-base font-semibold text-[color:var(--color-ink-strong)]">
+            Connexion a votre compte
+          </h2>
+          <p className="mt-0.5 text-xs text-[color:var(--color-ink-muted)]">
+            Utilisez vos identifiants institutionnels.
+          </p>
+        </div>
 
         {serverError && (
-          <div className="flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+          <div
+            role="alert"
+            className="flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800"
+          >
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>{serverError}</span>
           </div>
         )}
 
-        <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="email">Email</label>
-          <input id="email" type="email" autoComplete="username" className="input" {...register('email')} />
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-[color:var(--color-ink-strong)]" htmlFor="email">
+            Adresse email
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="username"
+            placeholder="prenom.nom@eni.mg"
+            className="input"
+            aria-invalid={!!formState.errors.email}
+            {...register('email')}
+          />
           {formState.errors.email && (
             <p className="text-xs text-red-600">{formState.errors.email.message}</p>
           )}
         </div>
 
-        <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="password">Mot de passe</label>
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-[color:var(--color-ink-strong)]" htmlFor="password">
+            Mot de passe
+          </label>
           <input
             id="password"
             type="password"
             autoComplete="current-password"
+            placeholder="********"
             className="input"
+            aria-invalid={!!formState.errors.password}
             {...register('password')}
           />
           {formState.errors.password && (
@@ -90,9 +118,13 @@ export function LoginPage() {
         </button>
 
         <p className="text-center text-xs text-[color:var(--color-ink-muted)]">
-          Besoin d'aide ? Contactez l'administration.
+          Mot de passe oublie ? Contactez l'administration.
         </p>
       </form>
+
+      <p className="mt-6 text-center text-[11px] text-[color:var(--color-ink-subtle)]">
+        &copy; {new Date().getFullYear()} Ecole Nationale d'Informatique. Tous droits reserves.
+      </p>
     </div>
   )
 }

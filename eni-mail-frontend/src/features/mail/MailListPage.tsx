@@ -86,28 +86,48 @@ export function MailListPage() {
                   <Link
                     to={target}
                     className={cn(
-                      'flex items-start gap-3 px-4 py-3 transition hover:bg-[color:var(--color-surface-muted)]',
-                      !readable && 'bg-[color:var(--color-brand-50)]/60',
+                      'relative flex items-start gap-3 px-4 py-3.5 transition hover:bg-[color:var(--color-surface-muted)]',
+                      !readable && 'bg-[color:var(--color-brand-50)]/50',
                     )}
                   >
+                    {!readable && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute left-0 top-0 h-full w-[3px] bg-[color:var(--color-brand-600)]"
+                      />
+                    )}
                     <Avatar name={m.senderDisplayName ?? m.senderEmail ?? '?'} size="sm" />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
-                        <div className={cn('truncate text-sm', !readable ? 'font-semibold' : 'font-medium')}>
+                        <div
+                          className={cn(
+                            'truncate text-sm',
+                            !readable
+                              ? 'font-semibold text-[color:var(--color-ink-strong)]'
+                              : 'font-medium text-[color:var(--color-ink)]',
+                          )}
+                        >
                           {meta.value === 'INBOX' || meta.value === 'TRASH'
                             ? m.senderDisplayName ?? m.senderEmail ?? ''
                             : m.recipientLabels.join(', ') || '(aucun destinataire)'}
                         </div>
-                        <div className="whitespace-nowrap text-xs text-[color:var(--color-ink-muted)]">
+                        <div className="whitespace-nowrap text-xs text-[color:var(--color-ink-subtle)] tabular-nums">
                           {formatDate(m.sentAt ?? m.createdAt)}
                         </div>
                       </div>
                       <div className="mt-0.5 flex items-center gap-2">
-                        <span className={cn('truncate text-sm', !readable && 'font-semibold')}>
+                        <span
+                          className={cn(
+                            'truncate',
+                            !readable
+                              ? 'text-[15px] font-semibold text-[color:var(--color-ink-strong)]'
+                              : 'text-[14px] text-[color:var(--color-ink)]',
+                          )}
+                        >
                           {m.subject || '(sans objet)'}
                         </span>
                         {m.attachmentCount > 0 && (
-                          <Paperclip className="h-3.5 w-3.5 shrink-0 text-[color:var(--color-ink-muted)]" />
+                          <Paperclip className="h-3.5 w-3.5 shrink-0 text-[color:var(--color-ink-subtle)]" />
                         )}
                         {m.draft && (
                           <span className="badge bg-amber-100 text-amber-800">Brouillon</span>
