@@ -1,0 +1,44 @@
+@startuml attachment-download
+!include ../_style.iuml
+title Sequence — Telechargement d'une piece jointe (Bearer blob)
+
+actor "Utilisateur" as U
+participant "MessageViewPage" as UI
+participant "attachmentsApi\n(downloadAttachment)" as API
+participant "Axios" as AX
+participant "AttachmentController" as CTL
+participant "AttachmentService" as S
+participant "AttachmentRepo" as AR
+participant "MessageRepo" as MR
+participant "Filesystem" as FS
+
+U -> UI : Clic sur une PJ
+UI -> API : downloadAttachment(id, filename)
+API -> AX : GET /api/attachments/{id}\nresponseType=blob
+AX -> CTL : Authorization: Bearer
+CTL -> S : download(id, currentUser)
+S -> AR : findById(id)
+AR --> S : Attachment
+S -> S : assertDownloadAccess(user)
+alt owner / sender / recipient / admin
+  S -> MR : findById(att.messageId)
+  MR --> S : Message
+  S -> FS : path.startsWith(storageRoot) ?
+  alt path invalide
+    S --> CTL : 400 INVALID_PATH
+  else ok
+    S -> FS : streaming
+    FS --> CTL : InputStream
+    CTL --> AX : 200 + Content-Disposition
+    AX --> API : Blob + headers
+    API -> API : extractFilename(Content-Disposition)
+    API -> API : URL.createObjectURL(blob)
+    API -> UI : simulate click <a download>
+    UI --> U : fichier enregistre
+  end
+else non autorise
+  S --> CTL : ForbiddenException
+  CTL --> AX : 403 ATTACHMENT_FORBIDDEN
+end
+
+@enduml

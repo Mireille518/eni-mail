@@ -21,6 +21,10 @@ On distingue donc trois machines séparées : **document**, **projection expédi
 
 ### 2.2. ET-01-a — Cycle du document `Message`
 
+![État document message](diagrams/png/state/message-document.png)
+
+**Figure 7.1 — Cycle de vie du document Message.** · Source : [`sources/state/message-document.puml`](sources/state/message-document.puml) · [SVG](diagrams/svg/state/message-document.svg)
+
 ```mermaid
 stateDiagram-v2
     [*] --> Brouillon : save(draft=true)
@@ -50,6 +54,10 @@ stateDiagram-v2
 ```
 
 ### 2.4. ET-01-c — Cycle de la projection « destinataire » (pour chaque destinataire indépendamment)
+
+![État projection destinataire](diagrams/png/state/message-recipient.png)
+
+**Figure 7.3 — Projection par destinataire.** · Source : [`sources/state/message-recipient.puml`](sources/state/message-recipient.puml) · [SVG](diagrams/svg/state/message-recipient.svg)
 
 ```mermaid
 stateDiagram-v2
@@ -87,6 +95,10 @@ stateDiagram-v2
 
 ## 3. ET-02 — Cycle de vie d'un utilisateur
 
+![État utilisateur](diagrams/png/state/user-lifecycle.png)
+
+**Figure 7.4 — Cycle de vie d'un utilisateur.** · Source : [`sources/state/user-lifecycle.puml`](sources/state/user-lifecycle.puml) · [SVG](diagrams/svg/state/user-lifecycle.svg)
+
 ```mermaid
 stateDiagram-v2
     [*] --> Actif : POST /api/users par admin<br/>status=ACTIVE
@@ -113,6 +125,10 @@ stateDiagram-v2
 ---
 
 ## 4. ET-03 — Cycle de vie d'une session
+
+![État session](diagrams/png/state/session-lifecycle.png)
+
+**Figure 7.5 — Cycle de vie d'une session.** · Source : [`sources/state/session-lifecycle.puml`](sources/state/session-lifecycle.puml) · [SVG](diagrams/svg/state/session-lifecycle.svg)
 
 ```mermaid
 stateDiagram-v2
@@ -149,6 +165,10 @@ stateDiagram-v2
 ---
 
 ## 5. ET-04 — Cycle de vie d'un `RefreshToken`
+
+![État refresh token](diagrams/png/state/refresh-token-lifecycle.png)
+
+**Figure 7.6 — Cycle de vie d'un RefreshToken.** · Source : [`sources/state/refresh-token-lifecycle.puml`](sources/state/refresh-token-lifecycle.puml) · [SVG](diagrams/svg/state/refresh-token-lifecycle.svg)
 
 ```mermaid
 stateDiagram-v2

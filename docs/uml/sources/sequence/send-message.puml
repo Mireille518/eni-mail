@@ -1,0 +1,38 @@
+@startuml send-message
+!include ../_style.iuml
+title Sequence — Envoi d'un message
+
+actor "Expediteur" as U
+participant "ComposePage" as UI
+participant "Axios" as AX
+participant "MessageController" as CTL
+participant "MessageService" as S
+participant "UserRepository" as UR
+participant "AttachmentRepo" as AR
+participant "MessageRepository" as MR
+database "MongoDB" as DB
+
+U -> UI : Saisit destinataire, objet, corps
+UI -> AX : POST /api/messages\n{toUserIds, subject, body}
+AX -> CTL : Bearer access
+CTL -> S : send(req, sender)
+S -> UR : findByIdIn(toUserIds)
+UR -> DB : find users
+DB --> UR : destinataires
+UR --> S : liste User
+S -> S : verif tous ACTIVE,\nconstruit recipients[]\n(dedupe)
+opt pieces jointes
+  S -> AR : findByIdIn(attachmentIds)
+  AR --> S : attachments
+  S -> S : verif owner == sender
+end
+S -> MR : save(Message{draft=false, sentAt=now})
+MR -> DB : db.messages.insertOne
+DB --> MR : id
+opt attachments
+  S -> AR : saveAll(att.setMessageId=m.id)
+end
+S --> CTL : MessageDto
+CTL --> AX : 201 + MessageDto
+
+@enduml

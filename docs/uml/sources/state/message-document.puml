@@ -1,0 +1,26 @@
+@startuml message-document
+!include ../_style.iuml
+title Cycle de vie du document Message (vue globale)
+
+[*] --> Brouillon : save(draft=true)
+Brouillon --> Brouillon : updateDraft(asDraft=true)
+Brouillon --> Envoye : updateDraft(asDraft=false)\nsentAt = now
+[*] --> Envoye : send() direct
+Envoye --> Supprime : deletePermanent\n(si plus personne ne voit)
+Brouillon --> Supprime : deletePermanent (owner)
+Supprime --> [*]
+
+note right of Brouillon
+  draft = true
+  senderFolder = DRAFT
+  sentAt = null
+end note
+
+note right of Envoye
+  draft = false
+  senderFolder = SENT
+  sentAt != null
+  Pas de retour possible
+end note
+
+@enduml

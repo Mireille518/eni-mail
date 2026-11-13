@@ -1,0 +1,110 @@
+@startuml package-diagram
+!include _style.iuml
+title Organisation des packages Java — mg.eni.email
+
+package "mg.eni.email" {
+  class EmailApplication
+}
+
+package "mg.eni.email.config" as cfg {
+  class SecurityConfig
+  class MongoConfig
+  class DataInitializer
+  class JwtProperties
+  class CorsProperties
+  class AttachmentProperties
+  class SecurityProperties
+  class AdminSeedProperties
+}
+
+package "mg.eni.email.security" as sec {
+  class JwtService
+  class JwtAuthenticationFilter
+  class CustomUserDetailsService
+  class CurrentUser
+  class SecurityUtils
+  class LoginAttemptService
+}
+
+package "mg.eni.email.controller" as ctl {
+  class AuthController
+  class UserController
+  class MessageController
+  class GroupController
+  class AttachmentController
+  class SearchController
+  class AdminController
+}
+
+package "mg.eni.email.service" as svc {
+  class AuthService
+  class UserService
+  class MessageService
+  class GroupService
+  class AttachmentService
+  class AdminStatsService
+}
+
+package "mg.eni.email.repository" as repo {
+  class UserRepository
+  class MessageRepository
+  class MessageRepositoryCustom
+  class MessageRepositoryImpl
+  class GroupRepository
+  class AttachmentRepository
+  class RefreshTokenRepository
+}
+
+package "mg.eni.email.document" as doc {
+  class User
+  class Message
+  class MessageRecipient
+  class Attachment
+  class Group
+  class RefreshToken
+}
+
+package "mg.eni.email.dto" as dto {
+  package "request"  { }
+  package "response" { }
+}
+
+package "mg.eni.email.enums" as enu {
+  class Role
+  class AccountStatus
+  class MessageFolder
+  class RecipientType
+}
+
+package "mg.eni.email.exception" as exc {
+  class GlobalExceptionHandler
+  class BusinessException
+  class ResourceNotFoundException
+  class ForbiddenException
+  class UnauthorizedException
+  class ConflictException
+  class TooManyRequestsException
+  class ApiErrorResponse
+}
+
+EmailApplication --> cfg
+cfg --> sec
+cfg --> repo
+cfg --> doc
+ctl --> svc
+ctl --> dto
+ctl --> sec
+ctl --> exc
+svc --> repo
+svc --> doc
+svc --> exc
+svc --> dto
+repo --> doc
+sec --> doc
+sec --> repo
+sec --> cfg
+doc --> enu
+exc <-- ctl
+dto --> enu
+
+@enduml

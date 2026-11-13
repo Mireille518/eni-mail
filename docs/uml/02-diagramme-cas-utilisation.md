@@ -12,6 +12,16 @@ Ce document présente les **cas d'utilisation** du système ENI Mail, selon la v
 
 ## 2. Diagramme global
 
+### Représentation graphique (PlantUML)
+
+![Diagramme global des cas d'utilisation ENI Mail](diagrams/png/use-case-global.png)
+
+**Figure 2.1 — Cas d'utilisation global d'ENI Mail.**
+
+> Source éditable : [`sources/use-case-global.puml`](sources/use-case-global.puml) · Version vectorielle : [SVG](diagrams/svg/use-case-global.svg).
+
+### Équivalent Mermaid (pour édition rapide dans GitHub)
+
 ```mermaid
 flowchart LR
     Student((Étudiant))

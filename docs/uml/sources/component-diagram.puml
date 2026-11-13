@@ -1,0 +1,53 @@
+@startuml component-diagram
+!include _style.iuml
+title Diagramme de composants — ENI Mail
+
+package "Navigateur" {
+  component "Frontend React SPA" as FE {
+    component "Pages" as Pages
+    component "Layouts" as Layouts
+    component "AuthContext" as AuthCtx
+    component "Services (Axios)" as Services
+    component "React Query cache" as RQ
+  }
+}
+
+package "Serveur applicatif (JVM)" {
+  component "Backend Spring Boot" as BE {
+    component "REST Controllers" as Controllers
+    component "Spring Security + JWT" as Security
+    component "Services metier" as SvcL
+    component "Repositories (Spring Data)" as Repos
+  }
+  folder "data/uploads/" as FS
+}
+
+database "MongoDB 7" as DB {
+  component "users" as Cu
+  component "messages" as Cm
+  component "groups" as Cg
+  component "attachments" as Ca
+  component "refresh_tokens" as Cr
+}
+
+interface "HTTP/JSON\n+ Bearer + Cookie" as HTTP
+interface "MongoDB wire protocol" as WIRE
+interface "I/O local" as IO
+
+FE -( HTTP
+HTTP -right- BE
+BE -( WIRE
+WIRE -right- DB
+BE -( IO
+IO -right- FS
+
+Pages --> Services
+Services --> AuthCtx
+Services ..> HTTP
+Controllers --> Security
+Controllers --> SvcL
+SvcL --> Repos
+Repos ..> WIRE
+SvcL ..> IO
+
+@enduml

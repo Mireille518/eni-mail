@@ -1,0 +1,27 @@
+@startuml mark-read
+!include ../_style.iuml
+title Sequence — Marquer lu / non lu
+
+actor "Destinataire" as D
+participant "MessageViewPage" as UI
+participant "Axios" as AX
+participant "MessageController" as CTL
+participant "MessageService" as S
+participant "MessageRepository" as MR
+
+D -> UI : Bouton "Non lu"
+UI -> AX : PATCH /api/messages/{id}/read?read=false
+AX -> CTL : Bearer
+CTL -> S : markRead(id, user, false)
+S -> S : assertCanAccess + findRecipient
+alt non destinataire
+  S --> CTL : ForbiddenException
+  CTL --> AX : 403 NOT_RECIPIENT
+else destinataire
+  S -> MR : markAsUnread(id, userId)\n{set recipients.$.read=false,\nunset recipients.$.readAt}
+  MR --> S : ok
+  S --> CTL : void
+  CTL --> AX : 204
+end
+
+@enduml

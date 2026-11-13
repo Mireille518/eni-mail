@@ -1,0 +1,21 @@
+@startuml search
+!include ../_style.iuml
+title Sequence — Recherche plein texte
+
+actor "Utilisateur" as U
+participant "SearchPage" as UI
+participant "SearchController" as CTL
+participant "MessageRepository" as MR
+database "MongoDB" as DB
+
+U -> UI : Saisit "planning"
+UI -> CTL : GET /api/search?q=planning&page=0&size=20
+CTL -> MR : searchFullText(q, me.id, pageable)
+MR -> DB : text query + Criteria\n(senderId=me OR recipients.userId=me)
+DB --> MR : cursor trie par score
+MR --> CTL : Page<Message>
+CTL -> CTL : hydrate users + toSummary
+CTL --> UI : PageResponse<MessageSummaryDto>
+UI --> U : liste des resultats
+
+@enduml

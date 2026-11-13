@@ -1,0 +1,36 @@
+@startuml attachment-upload
+!include ../_style.iuml
+title Sequence — Upload d'une piece jointe
+
+actor "Utilisateur" as U
+participant "ComposePage" as UI
+participant "Axios" as AX
+participant "AttachmentController" as CTL
+participant "AttachmentService" as S
+participant "Filesystem" as FS
+participant "AttachmentRepo" as AR
+
+U -> UI : Selectionne fichier
+UI -> AX : POST /api/attachments (multipart)
+AX -> CTL : Bearer access
+CTL -> S : upload(file, owner)
+S -> S : size <= 5 Mo ?
+alt trop volumineux
+  S --> CTL : 413 FILE_TOO_LARGE
+else OK
+  S -> S : MIME dans whitelist ?
+  alt interdit
+    S --> CTL : 415 MIME_NOT_ALLOWED
+  else OK
+    S -> S : clean filename (anti ..\\/)
+    S -> S : storedName = UUID + ext
+    S -> FS : Files.copy(in, storageRoot/stored)
+    FS --> S : ok
+    S -> AR : save(Attachment{ownerId})
+    AR --> S : Attachment
+    S --> CTL : Attachment
+    CTL --> AX : 201 + AttachmentDto
+  end
+end
+
+@enduml

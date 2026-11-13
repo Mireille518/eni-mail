@@ -22,6 +22,16 @@ Base de données cible : **`eni_mail_dev`** (développement) — `eni_mail_prod`
 
 ### Schéma des relations inter-collections
 
+#### Représentation graphique (PlantUML)
+
+![Schéma des collections MongoDB](diagrams/png/mongodb-schema.png)
+
+**Figure 11.1 — Modèle de données MongoDB (collections, références, index).**
+
+> Source éditable : [`sources/mongodb-schema.puml`](sources/mongodb-schema.puml) · Version vectorielle : [SVG](diagrams/svg/mongodb-schema.svg).
+
+#### Équivalent Mermaid
+
 ```mermaid
 flowchart LR
     users[(users)]

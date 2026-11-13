@@ -1,0 +1,37 @@
+@startuml deployment-diagram
+!include _style.iuml
+title Diagramme de deploiement — Production recommandee
+
+node "Poste utilisateur" as Client {
+  artifact "Navigateur web"
+}
+
+cloud "Internet / LAN ENI" as Net
+
+node "Serveur reverse proxy" as Proxy {
+  artifact "Nginx / Caddy\n(TLS 443, HSTS)"
+}
+
+node "Serveur applicatif Linux" as App {
+  artifact "ENI Mail SPA\n(/var/www/eni-mail/dist/)" as SPA
+  artifact "email-0.0.1-SNAPSHOT.jar\n(Spring Boot, port 8080)" as JAR
+  folder "/var/eni-mail/uploads/" as Up
+}
+
+node "Serveur de donnees" as DBnode {
+  database "MongoDB 7\n(authSource=admin, TLS)" as MDB
+}
+
+Client --> Net : HTTPS 443
+Net --> Proxy
+Proxy --> SPA   : /       (static)
+Proxy --> JAR   : /api/*  (reverse proxy)
+JAR   --> Up    : I/O local
+JAR   --> MDB   : mongodb+srv://
+
+note bottom of App
+  Service systemd : eni-mail.service
+  User : eni-mail (non-root)
+end note
+
+@enduml

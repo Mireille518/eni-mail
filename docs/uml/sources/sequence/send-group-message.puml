@@ -1,0 +1,33 @@
+@startuml send-group-message
+!include ../_style.iuml
+title Sequence — Envoi a un groupe
+
+actor "Enseignant" as P
+participant "ComposePage" as UI
+participant "MessageController" as CTL
+participant "MessageService" as S
+participant "GroupRepository" as GR
+participant "UserRepository" as UR
+participant "MessageRepository" as MR
+
+P -> UI : Selectionne groupe "M1 GLBD"
+UI -> CTL : POST /api/messages {toGroupIds:[gid], ...}
+CTL -> S : send(req, sender)
+S -> GR : findByIdIn([gid])
+GR --> S : [group]
+S -> S : checkGroupSendPermission(sender, [g])
+alt etudiant NON membre
+  S --> CTL : ForbiddenException
+  CTL --> UI : 403 GROUP_SEND_FORBIDDEN
+else autorise
+  S -> S : explicitTo = union(toUserIds,\n group.memberIds) - sender.id
+  S -> UR : findByIdIn(explicitTo)
+  UR --> S : n destinataires ACTIVE
+  S -> S : construit recipients[] (dedupe)
+  S -> MR : save(Message{groupIds:[gid]})
+  MR --> S : ok
+  S --> CTL : MessageDto
+  CTL --> UI : 201
+end
+
+@enduml

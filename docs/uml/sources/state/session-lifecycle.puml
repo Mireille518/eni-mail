@@ -1,0 +1,21 @@
+@startuml session-lifecycle
+!include ../_style.iuml
+title Cycle de vie d'une session utilisateur
+
+[*] --> NonAuthentifiee : chargement initial
+NonAuthentifiee --> Authentifiee : trySilentRefresh() OK\n(cookie valide)
+NonAuthentifiee --> Authentifiee : POST /api/auth/login
+Authentifiee --> AccessExpire : TTL 15 min ecoule
+AccessExpire --> Authentifiee : intercepteur refresh OK
+AccessExpire --> NonAuthentifiee : refresh invalide/expire
+Authentifiee --> NonAuthentifiee : POST /api/auth/logout
+Authentifiee --> NonAuthentifiee : fermeture navigateur
+
+note right of Authentifiee
+  - accessToken en memoire
+  - cookie eni_refresh valide
+  - navigation libre dans
+    les routes protegees
+end note
+
+@enduml

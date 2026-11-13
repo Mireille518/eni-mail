@@ -19,6 +19,10 @@ Les diagrammes utilisent la notation Mermaid et les fragments UML `alt`, `opt`, 
 
 ## 2. SQ-01 — Authentification
 
+![Séquence authentification](diagrams/png/sequence/authentication.png)
+
+**Figure 5.1 — Authentification.** · Source : [`sources/sequence/authentication.puml`](sources/sequence/authentication.puml) · [SVG](diagrams/svg/sequence/authentication.svg)
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -73,6 +77,10 @@ sequenceDiagram
 
 ## 3. SQ-02 — Déconnexion
 
+![Séquence déconnexion](diagrams/png/sequence/logout.png)
+
+**Figure 5.2 — Déconnexion.** · Source : [`sources/sequence/logout.puml`](sources/sequence/logout.puml) · [SVG](diagrams/svg/sequence/logout.svg)
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -101,6 +109,10 @@ sequenceDiagram
 ---
 
 ## 4. SQ-03 — Création d'un utilisateur par l'administrateur
+
+![Séquence création utilisateur](diagrams/png/sequence/create-user.png)
+
+**Figure 5.3 — Création d'un utilisateur par l'admin.** · Source : [`sources/sequence/create-user.puml`](sources/sequence/create-user.puml) · [SVG](diagrams/svg/sequence/create-user.svg)
 
 ```mermaid
 sequenceDiagram
@@ -143,6 +155,10 @@ sequenceDiagram
 ---
 
 ## 5. SQ-04 — Envoi d'un message à un utilisateur
+
+![Séquence envoi message](diagrams/png/sequence/send-message.png)
+
+**Figure 5.4 — Envoi d'un message.** · Source : [`sources/sequence/send-message.puml`](sources/sequence/send-message.puml) · [SVG](diagrams/svg/sequence/send-message.svg)
 
 ```mermaid
 sequenceDiagram
@@ -208,6 +224,10 @@ sequenceDiagram
 
 ## 7. SQ-06 — Réception et consultation d'un message
 
+![Séquence réception message](diagrams/png/sequence/receive-message.png)
+
+**Figure 5.6 — Réception et consultation d'un message.** · Source : [`sources/sequence/receive-message.puml`](sources/sequence/receive-message.puml) · [SVG](diagrams/svg/sequence/receive-message.svg)
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -240,6 +260,10 @@ sequenceDiagram
 ---
 
 ## 8. SQ-07 — Marquer comme lu / non lu
+
+![Séquence marquer lu/non lu](diagrams/png/sequence/mark-read.png)
+
+**Figure 5.7 — Marquer lu / non lu.** · Source : [`sources/sequence/mark-read.puml`](sources/sequence/mark-read.puml) · [SVG](diagrams/svg/sequence/mark-read.svg)
 
 ```mermaid
 sequenceDiagram
@@ -279,6 +303,10 @@ db.messages.updateOne(
 
 ## 9. SQ-08 — Réponse à un message
 
+![Séquence réponse](diagrams/png/sequence/reply-message.png)
+
+**Figure 5.8 — Réponse à un message.** · Source : [`sources/sequence/reply-message.puml`](sources/sequence/reply-message.puml) · [SVG](diagrams/svg/sequence/reply-message.svg)
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -309,6 +337,10 @@ sequenceDiagram
 
 ## 10. SQ-09 — Transfert
 
+![Séquence transfert](diagrams/png/sequence/forward-message.png)
+
+**Figure 5.9 — Transfert.** · Source : [`sources/sequence/forward-message.puml`](sources/sequence/forward-message.puml) · [SVG](diagrams/svg/sequence/forward-message.svg)
+
 Similaire à SQ-08 mais :
 
 ```mermaid
@@ -327,6 +359,10 @@ Pas de copie des pièces jointes du parent (choix V1 ; peut être ajouté sans c
 ---
 
 ## 11. SQ-10 — Enregistrement d'un brouillon
+
+![Séquence brouillon](diagrams/png/sequence/save-draft.png)
+
+**Figure 5.10 — Brouillon.** · Source : [`sources/sequence/save-draft.puml`](sources/sequence/save-draft.puml) · [SVG](diagrams/svg/sequence/save-draft.svg)
 
 ```mermaid
 sequenceDiagram
@@ -355,6 +391,10 @@ sequenceDiagram
 ---
 
 ## 12. SQ-11 — Envoi à un groupe
+
+![Séquence envoi groupe](diagrams/png/sequence/send-group-message.png)
+
+**Figure 5.11 — Envoi à un groupe.** · Source : [`sources/sequence/send-group-message.puml`](sources/sequence/send-group-message.puml) · [SVG](diagrams/svg/sequence/send-group-message.svg)
 
 ```mermaid
 sequenceDiagram
@@ -389,6 +429,10 @@ sequenceDiagram
 ---
 
 ## 13. SQ-12 — Ajout d'une pièce jointe
+
+![Séquence upload PJ](diagrams/png/sequence/attachment-upload.png)
+
+**Figure 5.12 — Upload d'une pièce jointe.** · Source : [`sources/sequence/attachment-upload.puml`](sources/sequence/attachment-upload.puml) · [SVG](diagrams/svg/sequence/attachment-upload.svg)
 
 ```mermaid
 sequenceDiagram
@@ -429,6 +473,10 @@ sequenceDiagram
 
 ## 14. SQ-13 — Téléchargement d'une pièce jointe
 
+![Séquence download PJ](diagrams/png/sequence/attachment-download.png)
+
+**Figure 5.13 — Téléchargement d'une pièce jointe (Bearer + Blob).** · Source : [`sources/sequence/attachment-download.puml`](sources/sequence/attachment-download.puml) · [SVG](diagrams/svg/sequence/attachment-download.svg)
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -468,6 +516,10 @@ sequenceDiagram
 
 ## 15. SQ-14 — Suppression (vers corbeille)
 
+![Séquence corbeille](diagrams/png/sequence/trash-message.png)
+
+**Figure 5.14 — Déplacement vers la corbeille.** · Source : [`sources/sequence/trash-message.puml`](sources/sequence/trash-message.puml) · [SVG](diagrams/svg/sequence/trash-message.svg)
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -501,6 +553,10 @@ sequenceDiagram
 
 ## 16. SQ-15 — Restauration
 
+![Séquence restauration](diagrams/png/sequence/restore-message.png)
+
+**Figure 5.15 — Restauration depuis la corbeille.** · Source : [`sources/sequence/restore-message.puml`](sources/sequence/restore-message.puml) · [SVG](diagrams/svg/sequence/restore-message.svg)
+
 Symétrique de SQ-14 : `restoreSender(id, SENT)` et/ou `restoreRecipient(id, userId, INBOX)`.
 
 ```mermaid
@@ -520,6 +576,10 @@ sequenceDiagram
 ---
 
 ## 17. SQ-16 — Suppression définitive
+
+![Séquence suppression définitive](diagrams/png/sequence/delete-permanent.png)
+
+**Figure 5.16 — Suppression définitive.** · Source : [`sources/sequence/delete-permanent.puml`](sources/sequence/delete-permanent.puml) · [SVG](diagrams/svg/sequence/delete-permanent.svg)
 
 ```mermaid
 sequenceDiagram
@@ -547,6 +607,10 @@ sequenceDiagram
 ---
 
 ## 18. SQ-17 — Recherche
+
+![Séquence recherche](diagrams/png/sequence/search.png)
+
+**Figure 5.17 — Recherche plein texte.** · Source : [`sources/sequence/search.puml`](sources/sequence/search.puml) · [SVG](diagrams/svg/sequence/search.svg)
 
 ```mermaid
 sequenceDiagram
@@ -637,6 +701,10 @@ sequenceDiagram
 ---
 
 ## 21. SQ-20 — Tableau de bord administrateur
+
+![Séquence admin dashboard](diagrams/png/sequence/admin-dashboard.png)
+
+**Figure 5.20 — Tableau de bord administrateur.** · Source : [`sources/sequence/admin-dashboard.puml`](sources/sequence/admin-dashboard.puml) · [SVG](diagrams/svg/sequence/admin-dashboard.svg)
 
 ```mermaid
 sequenceDiagram

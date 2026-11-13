@@ -1,0 +1,38 @@
+@startuml create-user
+!include ../_style.iuml
+title Sequence — Creation d'un utilisateur par l'admin
+
+actor "Admin" as A
+participant "AdminUsersPage" as UI
+participant "Axios" as AX
+participant "JwtAuthFilter" as F
+participant "UserController" as CTL
+participant "UserService" as S
+participant "PasswordEncoder" as PE
+participant "UserRepository" as UR
+
+A -> UI : email, mot de passe, role...
+UI -> AX : POST /api/users
+AX -> F : Authorization: Bearer
+F -> F : parse JWT, charge CurrentUser
+F -> CTL : next()
+CTL -> CTL : @PreAuthorize ROLE_ADMIN
+alt role OK
+  CTL -> S : create(req)
+  S -> UR : existsByEmailIgnoreCase(email)
+  alt email deja pris
+    S --> CTL : ConflictException
+    CTL --> AX : 409 EMAIL_ALREADY_USED
+  else libre
+    S -> PE : encode(password)
+    PE --> S : hash BCrypt
+    S -> UR : save(User)
+    UR --> S : User
+    S --> CTL : User
+    CTL --> AX : 201 + UserDto (sans password)
+  end
+else role insuffisant
+  CTL --> AX : 403 ACCESS_DENIED
+end
+
+@enduml

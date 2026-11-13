@@ -8,6 +8,16 @@ Ce document fournit une **vue synthétique** du système ENI Mail, utile pour un
 
 ## 2. Vue d'ensemble
 
+### Représentation graphique (PlantUML)
+
+![Architecture générale ENI Mail](diagrams/png/architecture-generale.png)
+
+**Figure 12.1 — Architecture générale d'ENI Mail.**
+
+> Source éditable : [`sources/architecture-generale.puml`](sources/architecture-generale.puml) · Version vectorielle : [SVG](diagrams/svg/architecture-generale.svg).
+
+### Équivalent Mermaid
+
 ```mermaid
 flowchart TB
     subgraph Users["Utilisateurs"]

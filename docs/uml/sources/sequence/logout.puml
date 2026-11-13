@@ -1,0 +1,28 @@
+@startuml logout
+!include ../_style.iuml
+title Sequence — Deconnexion
+
+actor "Utilisateur" as U
+participant "AppLayout\n(ConfirmDialog)" as UI
+participant "Axios" as AX
+participant "AuthController" as CTL
+participant "AuthService" as AS
+participant "RefreshTokenRepo" as RTR
+
+U -> UI : Clic "Se deconnecter"
+UI -> U : Dialogue de confirmation
+U -> UI : "Oui, me deconnecter"
+UI -> AX : POST /api/auth/logout\n(cookie eni_refresh)
+AX -> CTL : appel
+CTL -> AS : logout(rawRefresh)
+opt cookie valide
+  AS -> RTR : findByTokenHash(sha256(raw))
+  RTR --> AS : RefreshToken
+  AS -> RTR : save(revoked=true)
+end
+CTL --> AX : 204 + cookie vide
+AX --> UI : 204
+UI -> UI : setAccessToken(null), user=null
+UI --> U : redirection /login
+
+@enduml

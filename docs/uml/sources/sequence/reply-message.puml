@@ -1,0 +1,30 @@
+@startuml reply-message
+!include ../_style.iuml
+title Sequence — Reponse a un message
+
+actor "Utilisateur" as U
+participant "MessageViewPage" as View
+participant "ComposePage" as Comp
+participant "MessageController" as CTL
+participant "MessageService" as S
+participant "MessageRepository" as MR
+
+U -> View : Clic "Repondre"
+View -> Comp : navigate /compose?replyTo={parent.id}
+Comp -> CTL : GET /api/messages/{parent.id}
+CTL --> Comp : parent (prerempli)
+Comp -> Comp : objet = "Re: ..."\ntoUsers = [parent.sender]
+opt replyAll=true
+  Comp -> Comp : toUsers += parent.recipients (hors BCC, hors moi)
+end
+U -> Comp : Edite corps + Envoyer
+Comp -> CTL : POST /api/messages/{parent.id}/reply\n{body, replyAll}
+CTL -> S : reply(parentId, req, sender)
+S -> MR : findById(parentId) + assertCanAccess
+S -> S : parentMessageId=parent.id\nthreadId = parent.threadId or parent.id
+S -> MR : save(Message)
+MR --> S : ok
+S --> CTL : MessageDto
+CTL --> Comp : 201
+
+@enduml

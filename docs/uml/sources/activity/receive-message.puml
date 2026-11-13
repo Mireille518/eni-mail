@@ -1,0 +1,26 @@
+@startuml receive-message-activity
+!include ../_style.iuml
+title Activite — Reception et lecture d'un message
+
+start
+:Clic sur vignette;
+:GET /api/messages/{id};
+if (autorise ?) then (non)
+  :403 MESSAGE_ACCESS_DENIED;
+  :Toast + retour liste;
+  stop
+else (oui)
+  if (destinataire ?) then (non)
+    :Pas de markAsRead;
+  else (oui)
+    if (deja lu ?) then (oui)
+    else (non)
+      :markAsRead atomique;
+      :recipients.$.read = true\nreadAt = now;
+    endif
+  endif
+  :Retour MessageDto + attachments hydrates;
+  :Affichage MessageViewPage;
+  stop
+endif
+@enduml

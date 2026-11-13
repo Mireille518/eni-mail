@@ -10,6 +10,10 @@ Notation Mermaid `flowchart`. Chaque activité commence par `Debut` (cercle plei
 
 ## 2. AC-01 — Processus d'authentification
 
+![Activité authentification](diagrams/png/activity/authentication-activity.png)
+
+**Figure 6.1 — Processus d'authentification.** · Source : [`sources/activity/authentication.puml`](sources/activity/authentication.puml) · [SVG](diagrams/svg/activity/authentication-activity.svg)
+
 ```mermaid
 flowchart TD
     A([Debut]) --> B[Afficher LoginPage]
@@ -38,6 +42,10 @@ flowchart TD
 ---
 
 ## 3. AC-02 — Processus d'envoi d'un message
+
+![Activité envoi message](diagrams/png/activity/send-message-activity.png)
+
+**Figure 6.2 — Envoi d'un message.** · Source : [`sources/activity/send-message.puml`](sources/activity/send-message.puml) · [SVG](diagrams/svg/activity/send-message-activity.svg)
 
 ```mermaid
 flowchart TD
@@ -70,6 +78,10 @@ flowchart TD
 ---
 
 ## 4. AC-03 — Processus de réception et lecture
+
+![Activité réception message](diagrams/png/activity/receive-message-activity.png)
+
+**Figure 6.3 — Réception et lecture.** · Source : [`sources/activity/receive-message.puml`](sources/activity/receive-message.puml) · [SVG](diagrams/svg/activity/receive-message-activity.svg)
 
 ```mermaid
 flowchart TD
@@ -163,6 +175,10 @@ flowchart TD
 
 ## 8. AC-07 — Processus de gestion des pièces jointes
 
+![Activité gestion PJ](diagrams/png/activity/attachment-flow.png)
+
+**Figure 6.7 — Gestion des pièces jointes.** · Source : [`sources/activity/attachment-flow.puml`](sources/activity/attachment-flow.puml) · [SVG](diagrams/svg/activity/attachment-flow.svg)
+
 ```mermaid
 flowchart TD
     A([Debut : Clic Pieces jointes]) --> B[Ouverture selecteur de fichier]
@@ -208,6 +224,10 @@ flowchart TD
 
 ## 9. AC-08 — Processus de suppression et restauration
 
+![Activité suppression/restauration](diagrams/png/activity/delete-restore.png)
+
+**Figure 6.8 — Suppression et restauration.** · Source : [`sources/activity/delete-restore.puml`](sources/activity/delete-restore.puml) · [SVG](diagrams/svg/activity/delete-restore.svg)
+
 ```mermaid
 flowchart TD
     A([Debut]) --> B{Clic sur bouton}
@@ -239,6 +259,10 @@ flowchart TD
 ---
 
 ## 10. AC-09 — Processus de gestion des utilisateurs
+
+![Activité gestion utilisateurs](diagrams/png/activity/user-management.png)
+
+**Figure 6.9 — Gestion des utilisateurs.** · Source : [`sources/activity/user-management.puml`](sources/activity/user-management.puml) · [SVG](diagrams/svg/activity/user-management.svg)
 
 ```mermaid
 flowchart TD

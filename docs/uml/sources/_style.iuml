@@ -1,0 +1,132 @@
+' ===============================================================
+'  ENI Mail - Style commun PlantUML (inspiration Visual Paradigm)
+'  Inclus par chaque diagramme via !include ../_style.iuml
+' ===============================================================
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 12
+skinparam defaultFontColor #1F2933
+skinparam shadowing false
+skinparam roundCorner 6
+skinparam padding 2
+
+' --- Acteurs
+skinparam actor {
+  BackgroundColor #FFFFFF
+  BorderColor #3B5A7A
+  FontColor #1F2933
+}
+
+' --- Cas d'utilisation
+skinparam usecase {
+  BackgroundColor #F5F8FC
+  BorderColor #3B5A7A
+  FontColor #1F2933
+  ArrowColor #3B5A7A
+}
+
+' --- Classes
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #3B5A7A
+  ArrowColor #3B5A7A
+  HeaderBackgroundColor #E7EEF5
+  AttributeFontColor #1F2933
+  StereotypeFontColor #6B7280
+  FontStyle bold
+}
+skinparam classAttributeIconSize 9
+
+' --- Objets
+skinparam object {
+  BackgroundColor #FFFFFF
+  BorderColor #3B5A7A
+  ArrowColor #3B5A7A
+  HeaderBackgroundColor #FDF5E6
+}
+
+' --- Sequence
+skinparam sequence {
+  ArrowColor #3B5A7A
+  LifeLineBorderColor #94A3B8
+  LifeLineBackgroundColor #F8FAFC
+  ParticipantBorderColor #3B5A7A
+  ParticipantBackgroundColor #E7EEF5
+  ParticipantFontColor #1F2933
+  ActorBorderColor #3B5A7A
+  ActorBackgroundColor #FFFFFF
+  BoxBorderColor #94A3B8
+  BoxBackgroundColor #F1F5F9
+  GroupBorderColor #94A3B8
+  GroupBackgroundColor #F8FAFC
+  DividerBackgroundColor #E7EEF5
+}
+
+' --- Activity
+skinparam activity {
+  BackgroundColor #FFFFFF
+  BorderColor #3B5A7A
+  DiamondBackgroundColor #FDF5E6
+  DiamondBorderColor #B45309
+  ArrowColor #3B5A7A
+  StartColor #1F2933
+  EndColor #1F2933
+}
+
+' --- States
+skinparam state {
+  BackgroundColor #FFFFFF
+  BorderColor #3B5A7A
+  ArrowColor #3B5A7A
+  FontColor #1F2933
+  StartColor #1F2933
+  EndColor #1F2933
+}
+
+' --- Component
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #3B5A7A
+  ArrowColor #3B5A7A
+  FontColor #1F2933
+}
+skinparam interface {
+  BackgroundColor #FDF5E6
+  BorderColor #B45309
+}
+skinparam package {
+  BackgroundColor #F8FAFC
+  BorderColor #94A3B8
+  FontColor #1F2933
+  FontStyle bold
+}
+skinparam node {
+  BackgroundColor #F1F5F9
+  BorderColor #3B5A7A
+  FontColor #1F2933
+}
+skinparam database {
+  BackgroundColor #FDF5E6
+  BorderColor #B45309
+}
+skinparam cloud {
+  BackgroundColor #F0F9FF
+  BorderColor #0369A1
+}
+skinparam artifact {
+  BackgroundColor #FFFFFF
+  BorderColor #94A3B8
+}
+skinparam note {
+  BackgroundColor #FFF9E6
+  BorderColor #D9B872
+  FontColor #4B4330
+}
+
+' --- Fleches
+skinparam ArrowFontSize 11
+skinparam ArrowFontColor #334155
+
+' --- Rendu classes : Smetana (pas besoin de Graphviz)
+!pragma layout smetana

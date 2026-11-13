@@ -1,0 +1,134 @@
+@startuml class-diagram
+!include _style.iuml
+title Diagramme de classes — modele metier ENI Mail
+
+' ===== Enums =====
+enum Role {
+  ROLE_ETUDIANT
+  ROLE_ENSEIGNANT
+  ROLE_ADMIN
+  --
+  +authority() : String
+}
+
+enum AccountStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum MessageFolder {
+  INBOX
+  SENT
+  DRAFT
+  TRASH
+}
+
+enum RecipientType {
+  TO
+  CC
+  BCC
+}
+
+' ===== Classes metier =====
+class User {
+  -id : String
+  -email : String
+  -passwordHash : String
+  -firstName : String
+  -lastName : String
+  -role : Role
+  -filiere : String
+  -promotion : String
+  -avatarUrl : String
+  -status : AccountStatus
+  -createdAt : Instant
+  -updatedAt : Instant
+  --
+  +fullName() : String
+}
+
+class Message {
+  -id : String
+  -senderId : String
+  -subject : String
+  -body : String
+  -senderFolder : MessageFolder
+  -senderDeleted : boolean
+  -senderDeletedAt : Instant
+  -draft : boolean
+  -parentMessageId : String
+  -threadId : String
+  -attachmentIds : List<String>
+  -groupIds : List<String>
+  -createdAt : Instant
+  -sentAt : Instant
+}
+
+class MessageRecipient <<embedded>> {
+  -userId : String
+  -type : RecipientType
+  -read : boolean
+  -readAt : Instant
+  -folder : MessageFolder
+  -deleted : boolean
+  -deletedAt : Instant
+}
+
+class Attachment {
+  -id : String
+  -messageId : String
+  -ownerId : String
+  -filename : String
+  -storedName : String
+  -contentType : String
+  -size : long
+  -createdAt : Instant
+}
+
+class Group {
+  -id : String
+  -name : String
+  -description : String
+  -memberIds : List<String>
+  -createdBy : String
+  -createdAt : Instant
+  -updatedAt : Instant
+}
+
+class RefreshToken {
+  -id : String
+  -userId : String
+  -tokenHash : String
+  -expiresAt : Instant
+  -revoked : boolean
+  -createdAt : Instant
+}
+
+class CurrentUser <<Spring Security>> {
+  -user : User
+  --
+  +getId() : String
+  +getAuthorities() : Collection
+  +isEnabled() : boolean
+}
+
+' ===== Associations =====
+User "1" --> "0..*" Message       : expedie\n(senderId)
+Message "1" *-- "1..*" MessageRecipient : contient\n(composition)
+MessageRecipient "*" --> "1" User : cible\n(userId)
+Message "0..1" --> "0..*" Message : parent\n(parentMessageId)
+Message "0..*" --> "0..*" Group   : adresse a\n(groupIds)
+Message "1" --> "0..*" Attachment : porte\n(attachmentIds)
+Attachment "0..*" --> "1" User    : proprietaire\n(ownerId)
+Group "0..*" --> "0..*" User      : membres\n(memberIds)
+Group "1" --> "1" User            : cree par\n(createdBy)
+User "1" --> "0..*" RefreshToken  : possede
+CurrentUser ..> User              : enveloppe
+
+User --> Role
+User --> AccountStatus
+Message --> MessageFolder
+MessageRecipient --> MessageFolder
+MessageRecipient --> RecipientType
+
+@enduml

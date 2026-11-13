@@ -1,0 +1,49 @@
+@startuml authentication
+!include ../_style.iuml
+title Sequence — Authentification
+
+actor "Utilisateur" as U
+participant "LoginPage" as UI
+participant "Axios API" as AX
+participant "AuthController" as CTL
+participant "AuthService" as AS
+participant "LoginAttemptService" as LA
+participant "UserRepository" as UR
+participant "JwtService" as JS
+participant "RefreshTokenRepo" as RTR
+database "MongoDB" as DB
+
+U -> UI : email + mot de passe
+UI -> AX : POST /api/auth/login
+AX -> CTL : appel HTTP
+CTL -> AS : login(email, password)
+AS -> LA : isBlocked(email) ?
+alt verrouille
+  LA --> AS : true
+  AS --> CTL : throw TooManyRequestsException
+  CTL --> AX : 429 TOO_MANY_REQUESTS
+else non verrouille
+  LA --> AS : false
+  AS -> UR : findByEmailIgnoreCase(email)
+  UR -> DB : find users
+  DB --> UR : user doc
+  UR --> AS : Optional<User>
+  alt invalide
+    AS -> LA : onFailure(email)
+    AS --> CTL : BadCredentialsException
+    CTL --> AX : 401 BAD_CREDENTIALS
+  else OK
+    AS -> LA : onSuccess(email)
+    AS -> JS : generateAccessToken(user)
+    AS -> JS : generateRefreshToken(user)
+    AS -> RTR : save(RefreshToken{hash})
+    RTR -> DB : insert
+    AS --> CTL : AuthResult
+    CTL --> AX : 200 + Set-Cookie eni_refresh (HttpOnly, SameSite=Lax)
+    AX --> UI : {accessToken, user}
+    UI -> UI : setAccessToken + user
+    UI --> U : redirection /inbox
+  end
+end
+
+@enduml

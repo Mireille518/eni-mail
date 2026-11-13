@@ -1,0 +1,39 @@
+@startuml architecture-generale
+!include _style.iuml
+title Architecture generale — ENI Mail
+
+actor "Etudiant"       as Et
+actor "Enseignant"     as En
+actor "Administrateur" as Ad
+
+node "Navigateur" {
+  component "ENI Mail SPA\n(React 19 + Vite + Tailwind v4)" as SPA
+}
+
+node "Serveur applicatif" {
+  component "Spring Security\n(JwtAuthFilter + LoginAttempt)" as SEC
+  component "REST Controllers\n(Auth/User/Message/Group/Attachment/Search/Admin)" as REST
+  component "Services metier" as SRV
+  component "Repositories" as REPO
+  folder "data/uploads/" as FS
+}
+
+database "MongoDB 7" as DB {
+  component users
+  component messages
+  component groups
+  component attachments
+  component refresh_tokens
+}
+
+Et --> SPA
+En --> SPA
+Ad --> SPA
+SPA --> SEC : HTTPS JSON\nBearer + Cookie refresh
+SEC --> REST
+REST --> SRV
+SRV --> REPO
+SRV --> FS
+REPO --> DB
+
+@enduml

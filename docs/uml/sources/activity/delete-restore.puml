@@ -1,0 +1,48 @@
+@startuml delete-restore
+!include ../_style.iuml
+title Activite — Suppression et restauration
+
+start
+switch (action)
+case ( Supprimer )
+  :Dialog de confirmation;
+  if (Confirmer ?) then (non)
+    :Annulation;
+    stop
+  else (oui)
+    :DELETE /api/messages/{id};
+    if (user est sender ?) then (oui)
+      :senderFolder=TRASH\nsenderDeleted=true;
+    endif
+    if (user est destinataire ?) then (oui)
+      :recipients.$.folder=TRASH\nrecipients.$.deleted=true;
+    endif
+    :Toast + retour liste;
+    stop
+  endif
+case ( Restaurer )
+  :POST /messages/{id}/restore;
+  if (user est sender ?) then (oui)
+    :restoreSender vers SENT;
+  endif
+  if (user est destinataire ?) then (oui)
+    :restoreRecipient vers INBOX;
+  endif
+  :Toast + reload;
+  stop
+case ( Supprimer definitivement )
+  :Dialog de confirmation;
+  if (Confirmer ?) then (non)
+    stop
+  else (oui)
+    :Marquer deleted pour user;
+    if (quelqu'un voit encore ?) then (oui)
+      :save avec drapeaux;
+    else (non)
+      :messageRepository.deleteById;
+    endif
+    :Toast + retour corbeille;
+    stop
+  endif
+endswitch
+@enduml

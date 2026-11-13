@@ -64,6 +64,16 @@ Sur beaucoup de postes, le port 8080 est occupé (Oracle REST, EnterpriseDB PEM,
 
 ## 3. Environnement de production (recommandation)
 
+### Représentation graphique (PlantUML)
+
+![Diagramme de déploiement production](diagrams/png/deployment-diagram.png)
+
+**Figure 9.1 — Déploiement de production recommandé.**
+
+> Source éditable : [`sources/deployment-diagram.puml`](sources/deployment-diagram.puml) · Version vectorielle : [SVG](diagrams/svg/deployment-diagram.svg).
+
+### Équivalent Mermaid
+
 ```mermaid
 flowchart LR
     subgraph Internet["Internet / LAN ENI"]

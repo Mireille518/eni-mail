@@ -1,0 +1,43 @@
+@startuml user-management
+!include ../_style.iuml
+title Activite — Gestion des utilisateurs (admin)
+
+start
+:Ouvre AdminUsersPage;
+:GET /api/users?q=&role=;
+:Table paginable affichee;
+switch (action)
+case ( Creer )
+  :Modal CreateUserModal;
+  :Saisie email, mot de passe,\nrole, filiere, promotion;
+  :POST /api/users;
+  if (role admin ?) then (non)
+    :403 ACCESS_DENIED;
+    stop
+  else (oui)
+    if (email libre ?) then (non)
+      :409 EMAIL_ALREADY_USED;
+      stop
+    else (oui)
+      :BCrypt + save;
+      :Toast + rechargement liste;
+      stop
+    endif
+  endif
+case ( Desactiver )
+  :Dialog de confirmation;
+  if (admin.id == target.id ?) then (oui)
+    :403 CANNOT_DISABLE_SELF;
+    stop
+  else (non)
+    :DELETE /api/users/{id};
+    :status=DISABLED;
+    :Toast + liste MAJ;
+    stop
+  endif
+case ( Reactiver )
+  :PATCH /api/users/{id} status=ACTIVE;
+  :Toast + liste MAJ;
+  stop
+endswitch
+@enduml

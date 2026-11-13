@@ -1,0 +1,43 @@
+@startuml send-message-activity
+!include ../_style.iuml
+title Activite — Envoi d'un message
+
+start
+:Clic "Nouveau message";
+:ComposePage charge;
+:Pre-remplissage (draft / replyTo / forward);
+:Saisie destinataires / objet / corps;
+if (clic ?) then (Enregistrer brouillon)
+  :asDraft = true;
+  :POST /messages ou PUT /drafts;
+  stop
+else (Envoyer)
+  if (objet rempli ?) then (non)
+    :Toast objet requis;
+    stop
+  else (oui)
+    if (au moins un destinataire ?) then (non)
+      :Toast destinataire requis;
+      stop
+    else (oui)
+      :POST /api/messages asDraft=false;
+      if (reponse) then (201)
+        :Invalidation cache;
+        :Toast succes;
+        :Navigate /sent;
+        stop
+      else (4xx)
+        switch (code)
+        case ( 403 GROUP_SEND_FORBIDDEN )
+          :Toast droits insuffisants;
+        case ( 409 RECIPIENT_DISABLED )
+          :Toast destinataire desactive;
+        case ( autre )
+          :Toast erreur;
+        endswitch
+        stop
+      endif
+    endif
+  endif
+endif
+@enduml

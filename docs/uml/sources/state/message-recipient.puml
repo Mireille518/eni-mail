@@ -1,0 +1,24 @@
+@startuml message-recipient
+!include ../_style.iuml
+title Cycle de vie — projection par destinataire
+
+[*] --> NonLu : message envoye\nfolder=INBOX,\ndeleted=false
+NonLu --> Lu : GET /messages/{id}\n(par ce destinataire)
+Lu --> NonLu : PATCH /read?read=false
+NonLu --> DansCorbeille : moveToTrash\nfolder=TRASH, deleted=true
+Lu --> DansCorbeille : moveToTrash
+DansCorbeille --> NonLu : restore + markAsUnread
+DansCorbeille --> Lu : restore
+DansCorbeille --> [*] : deletePermanent
+Lu --> [*] : deletePermanent direct
+NonLu --> [*] : deletePermanent direct
+
+note right of NonLu
+  Chaque destinataire a sa
+  propre instance de cette
+  machine. Les etats sont
+  totalement independants
+  entre destinataires.
+end note
+
+@enduml

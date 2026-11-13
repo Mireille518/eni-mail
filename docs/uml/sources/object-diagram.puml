@@ -1,0 +1,93 @@
+@startuml object-diagram
+!include _style.iuml
+title Diagramme d'objets — envoi d'un message au groupe "M1 GLBD"
+
+object "prof_rakoto : User" as prof {
+  id = 6aedce82...cca2
+  email = prof.rakoto@eni.mg
+  role = ROLE_ENSEIGNANT
+  status = ACTIVE
+}
+
+object "etu_andria : User" as andria {
+  id = 6aedce82...cca4
+  email = etu.andria@eni.mg
+  role = ROLE_ETUDIANT
+  filiere = GLBD
+  promotion = M1
+  status = ACTIVE
+}
+
+object "etu_ravelo : User" as ravelo {
+  id = 6aedce82...cca5
+  email = etu.ravelo@eni.mg
+  role = ROLE_ETUDIANT
+  filiere = GLBD
+  promotion = M1
+  status = ACTIVE
+}
+
+object "gM1 : Group" as group {
+  id = 6b2...
+  name = M1 GLBD
+  description = Promo Master 1
+  memberIds = [andria.id, ravelo.id]
+  createdBy = admin.id
+}
+
+object "msgPlanning : Message" as msg {
+  id = 6c0...
+  senderId = prof_rakoto.id
+  subject = Planning examens S1
+  body = Chers etudiants...
+  senderFolder = SENT
+  draft = false
+  sentAt = 2026-11-12T08:15:00Z
+  attachmentIds = [att1.id]
+  groupIds = [gM1.id]
+}
+
+object "r1 : MessageRecipient" as r1 {
+  userId = etu_andria.id
+  type = TO
+  read = false
+  folder = INBOX
+  deleted = false
+}
+
+object "r2 : MessageRecipient" as r2 {
+  userId = etu_ravelo.id
+  type = TO
+  read = true
+  readAt = 2026-11-12T08:22Z
+  folder = INBOX
+  deleted = false
+}
+
+object "att1 : Attachment" as att {
+  id = 6d1...
+  ownerId = prof_rakoto.id
+  messageId = msg.id
+  filename = planning-s1.pdf
+  storedName = 3f...uuid.pdf
+  contentType = application/pdf
+  size = 234567
+}
+
+group "memberIds" --> andria
+group "memberIds" --> ravelo
+prof "envoie" --> msg
+msg "recipients" *-- r1
+msg "recipients" *-- r2
+r1 --> andria
+r2 --> ravelo
+msg --> att
+att --> prof : ownerId
+
+note right of r1
+  Projection destinataire :
+  etat independant par
+  utilisateur (read, folder)
+end note
+
+@enduml

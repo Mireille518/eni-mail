@@ -1,0 +1,16 @@
+@startuml refresh-token-lifecycle
+!include ../_style.iuml
+title Cycle de vie d'un RefreshToken
+
+[*] --> Valide : save(revoked=false,\nexpiresAt=now+7j)
+Valide --> RevoqueParRotation : POST /auth/refresh\n(nouveau emis)
+Valide --> RevoqueParLogout : POST /auth/logout
+Valide --> Expire : date atteinte
+RevoqueParRotation --> MarqueVole : si presente a nouveau
+RevoqueParLogout --> MarqueVole : si presente a nouveau
+MarqueVole --> [*] : purge tous\nles refresh user
+Expire --> [*]
+RevoqueParRotation --> [*]
+RevoqueParLogout --> [*]
+
+@enduml

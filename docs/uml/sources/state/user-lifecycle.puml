@@ -1,0 +1,20 @@
+@startuml user-lifecycle
+!include ../_style.iuml
+title Cycle de vie d'un utilisateur
+
+[*] --> Actif : POST /api/users\nstatus=ACTIVE
+Actif --> Desactive : DELETE /api/users/{id}\nstatus=DISABLED
+Desactive --> Actif : PATCH /api/users/{id}\nstatus=ACTIVE
+
+note left of Desactive
+  - Ne peut plus se connecter
+  - Reste auteur/destinataire
+    des messages historiques
+  - Refuse comme nouveau
+    destinataire (RECIPIENT_DISABLED)
+end note
+
+Actif --> [*] : suppression future (non implementee V1)
+Desactive --> [*] : idem
+
+@enduml

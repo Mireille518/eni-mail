@@ -10,6 +10,16 @@ Le modèle objet est volontairement maintenu aligné sur les documents Spring Da
 
 ## 2. Diagramme de classes complet
 
+### Représentation graphique (PlantUML)
+
+![Diagramme de classes ENI Mail](diagrams/png/class-diagram.png)
+
+**Figure 3.1 — Diagramme de classes du modèle métier ENI Mail.**
+
+> Source éditable : [`sources/class-diagram.puml`](sources/class-diagram.puml) · Version vectorielle : [SVG](diagrams/svg/class-diagram.svg).
+
+### Équivalent Mermaid
+
 ```mermaid
 classDiagram
     direction LR

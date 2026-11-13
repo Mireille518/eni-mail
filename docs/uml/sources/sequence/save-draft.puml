@@ -1,0 +1,26 @@
+@startuml save-draft
+!include ../_style.iuml
+title Sequence — Enregistrement d'un brouillon
+
+actor "Utilisateur" as U
+participant "ComposePage" as UI
+participant "MessageController" as CTL
+participant "MessageService" as S
+participant "MessageRepository" as MR
+
+U -> UI : Clic "Enregistrer brouillon"
+alt pas encore de draft
+  UI -> CTL : POST /api/messages {asDraft:true, ...}
+  CTL -> S : send(req, sender)
+else draft en cours
+  UI -> CTL : PUT /api/messages/drafts/{id} {asDraft:true, ...}
+  CTL -> S : updateDraft(id, req, sender)
+end
+S -> S : buildMessage(draft=true,\nsenderFolder=DRAFT, sentAt=null)
+S -> MR : save
+MR --> S : ok
+S --> CTL : MessageDto
+CTL --> UI : 200/201
+UI -> UI : si nouveau draft : URL /compose?draft={id}
+
+@enduml

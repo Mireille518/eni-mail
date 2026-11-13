@@ -1,0 +1,28 @@
+@startuml trash-message
+!include ../_style.iuml
+title Sequence — Deplacement vers la corbeille
+
+actor "Utilisateur" as U
+participant "MessageViewPage\n(ConfirmDialog)" as UI
+participant "MessageController" as CTL
+participant "MessageService" as S
+participant "MessageRepository" as MR
+
+U -> UI : Clic "Supprimer"
+UI -> U : Dialogue de confirmation
+U -> UI : "Oui, supprimer"
+UI -> CTL : DELETE /api/messages/{id}
+CTL -> S : moveToTrash(id, user)
+S -> MR : findById(id)
+MR --> S : Message
+S -> S : assertCanAccess
+opt user est sender
+  S -> MR : moveSenderToTrash(id)\n{senderFolder=TRASH, senderDeleted=true}
+end
+opt user est destinataire
+  S -> MR : moveRecipientToTrash(id, userId)\n{recipients.$.folder=TRASH,\nrecipients.$.deleted=true}
+end
+S --> CTL : void
+CTL --> UI : 204
+
+@enduml

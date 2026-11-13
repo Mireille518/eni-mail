@@ -1,0 +1,97 @@
+@startuml mongodb-schema
+!include _style.iuml
+title Schema MongoDB — collections et references
+
+entity users {
+  * _id : ObjectId
+  --
+  * email : String  <<unique, index>>
+  * password_hash : String
+  * firstName : String
+  * lastName : String
+  * role : Role
+  filiere : String  <<index>>
+  promotion : String  <<index>>
+  avatarUrl : String
+  * status : AccountStatus
+  * createdAt : Date
+  updatedAt : Date
+}
+
+entity messages {
+  * _id : ObjectId
+  --
+  * senderId : ObjectId -> users
+  * subject : String  <<text, poids 2>>
+  * body : String     <<text>>
+  * recipients : [ MessageRecipient ]
+  * senderFolder : MessageFolder
+  * senderDeleted : boolean
+  senderDeletedAt : Date
+  * draft : boolean <<index>>
+  parentMessageId : ObjectId
+  threadId : ObjectId <<index>>
+  attachmentIds : [ ObjectId ] -> attachments
+  groupIds : [ ObjectId ] -> groups
+  * createdAt : Date
+  sentAt : Date
+  --
+  <<index composed>>
+  (recipients.userId, recipients.folder, sentAt desc)
+  (senderId, senderFolder, sentAt desc)
+  (threadId, createdAt asc)
+}
+
+entity MessageRecipient <<embedded in messages.recipients[]>> {
+  * userId : ObjectId -> users
+  * type : RecipientType
+  * read : boolean
+  readAt : Date
+  * folder : MessageFolder
+  * deleted : boolean
+  deletedAt : Date
+}
+
+entity groups {
+  * _id : ObjectId
+  --
+  * name : String <<unique>>
+  description : String
+  memberIds : [ ObjectId ] -> users
+  * createdBy : ObjectId -> users  <<index>>
+  * createdAt : Date
+  updatedAt : Date
+}
+
+entity attachments {
+  * _id : ObjectId
+  --
+  messageId : ObjectId -> messages  <<index>>
+  * ownerId : ObjectId -> users     <<index>>
+  * filename : String
+  * storedName : String
+  * contentType : String
+  * size : Long
+  * createdAt : Date
+}
+
+entity refresh_tokens {
+  * _id : ObjectId
+  --
+  * userId : ObjectId -> users  <<index>>
+  * tokenHash : String <<unique>>
+  * expiresAt : Date
+  * revoked : boolean
+  * createdAt : Date
+}
+
+users ||--o{ messages        : senderId
+users ||--o{ attachments     : ownerId
+users ||--o{ refresh_tokens  : userId
+users }o--o{ groups          : memberIds (via arrays)
+users ||--o{ groups          : createdBy
+messages ||--|{ MessageRecipient : recipients (embedded)
+messages ||--o{ attachments  : attachmentIds (array)
+messages }o--o{ groups       : groupIds (array, tracabilite)
+
+@enduml

@@ -1,0 +1,34 @@
+@startuml receive-message
+!include ../_style.iuml
+title Sequence — Reception et consultation d'un message
+
+actor "Destinataire" as D
+participant "MailListPage" as List
+participant "MessageViewPage" as View
+participant "Axios" as AX
+participant "MessageController" as CTL
+participant "MessageService" as S
+participant "MessageRepository" as MR
+
+D -> List : Clic sur une vignette
+List -> View : navigate /messages/{id}
+View -> AX : GET /api/messages/{id}
+AX -> CTL : Bearer access
+CTL -> S : getOne(id, currentUser)
+S -> MR : findById(id)
+MR --> S : Message
+S -> S : assertCanAccess(message, user)
+alt non autorise
+  S --> CTL : ForbiddenException
+  CTL --> AX : 403 MESSAGE_ACCESS_DENIED
+else autorise et destinataire
+  S -> MR : markAsRead(id, userId)
+  MR --> S : ok
+  S -> S : toDto(message, currentUser)
+  S --> CTL : MessageDto
+  CTL --> AX : 200
+  AX --> View : MessageDto
+  View --> D : affichage
+end
+
+@enduml

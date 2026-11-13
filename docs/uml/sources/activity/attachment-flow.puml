@@ -1,0 +1,35 @@
+@startuml attachment-flow
+!include ../_style.iuml
+title Activite — Gestion des pieces jointes
+
+start
+:Clic "Pieces jointes";
+:Ouverture selecteur de fichier;
+:Selection un ou plusieurs fichiers;
+repeat
+  :POST /api/attachments (fichier);
+  if (size <= 5 Mo ?) then (non)
+    :413 FILE_TOO_LARGE;
+    :Toast + arret;
+    stop
+  else (oui)
+    if (MIME dans whitelist ?) then (non)
+      :415 MIME_NOT_ALLOWED;
+      :Toast;
+      stop
+    else (oui)
+      if (filename sans .. ni / ni \\ ?) then (non)
+        :400 INVALID_FILENAME;
+        stop
+      else (oui)
+        :UUID + ext -> storedName;
+        :Files.copy vers storageRoot;
+        :save Attachment(ownerId);
+        :Retour AttachmentDto;
+      endif
+    endif
+  endif
+repeat while (autre fichier ?)
+:Mise a jour liste dans ComposePage;
+stop
+@enduml

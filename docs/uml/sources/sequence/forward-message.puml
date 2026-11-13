@@ -1,0 +1,25 @@
+@startuml forward-message
+!include ../_style.iuml
+title Sequence — Transfert d'un message
+
+actor "Utilisateur" as U
+participant "MessageViewPage" as View
+participant "ComposePage" as Comp
+participant "MessageController" as CTL
+participant "MessageService" as S
+participant "MessageRepository" as MR
+
+U -> View : Clic "Transferer"
+View -> Comp : navigate /compose?forward={parent.id}
+Comp -> Comp : objet = "Tr: ..."\nbody = "-- Message transfere --\n" + parent.body
+U -> Comp : Saisit nouveaux destinataires
+Comp -> CTL : POST /api/messages/{parent.id}/forward\n{body, toUserIds, toGroupIds}
+CTL -> S : forward(parentId, req, sender)
+S -> MR : findById(parentId) + assertCanAccess
+S -> S : parentMessageId=parent.id\nthreadId = parent.threadId or parent.id\n(pas de copie des PJ V1)
+S -> MR : save(Message)
+MR --> S : ok
+S --> CTL : MessageDto
+CTL --> Comp : 201
+
+@enduml

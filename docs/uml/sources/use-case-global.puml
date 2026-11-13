@@ -1,0 +1,116 @@
+@startuml use-case-global
+!include _style.iuml
+title Diagramme global des cas d'utilisation — ENI Mail
+left to right direction
+
+actor "Etudiant"       as Etudiant
+actor "Enseignant"     as Enseignant
+actor "Administrateur" as Admin
+actor "Systeme"        as Systeme
+
+Etudiant <|-- Enseignant
+Enseignant <|-- Admin
+
+rectangle "ENI Mail" {
+
+  package "Authentification" {
+    usecase "UC-01 Se connecter"                 as UC01
+    usecase "UC-02 Se deconnecter"               as UC02
+    usecase "UC-03 Rafraichir le token"          as UC03
+    usecase "UC-04 Consulter son profil"         as UC04
+    usecase "UC-05 Modifier son profil"          as UC05
+    usecase "UC-06 Changer son mot de passe"     as UC06
+  }
+
+  package "Messagerie" {
+    usecase "UC-10 Composer un message"         as UC10
+    usecase "UC-11 Ajouter destinataires"       as UC11
+    usecase "UC-12 Envoyer un message"          as UC12
+    usecase "UC-13 Enregistrer un brouillon"    as UC13
+    usecase "UC-14 Lire un message"             as UC14
+    usecase "UC-15 Repondre"                    as UC15
+    usecase "UC-16 Repondre a tous"             as UC16
+    usecase "UC-17 Transferer"                  as UC17
+    usecase "UC-18 Marquer lu / non lu"         as UC18
+    usecase "UC-19 Deplacer corbeille"          as UC19
+    usecase "UC-20 Restaurer"                   as UC20
+    usecase "UC-21 Supprimer definitivement"    as UC21
+    usecase "UC-22 Rechercher un message"       as UC22
+  }
+
+  package "Pieces jointes" {
+    usecase "UC-30 Attacher un fichier"         as UC30
+    usecase "UC-31 Telecharger"                 as UC31
+    usecase "UC-32 Supprimer (brouillon)"       as UC32
+  }
+
+  package "Groupes" {
+    usecase "UC-40 Lister les groupes"          as UC40
+    usecase "UC-41 Creer un groupe"             as UC41
+    usecase "UC-42 Modifier un groupe"          as UC42
+    usecase "UC-43 Ajouter membres"             as UC43
+    usecase "UC-44 Retirer un membre"           as UC44
+    usecase "UC-45 Supprimer un groupe"         as UC45
+    usecase "UC-46 Envoyer a un groupe"         as UC46
+  }
+
+  package "Administration" {
+    usecase "UC-50 Creer un utilisateur"        as UC50
+    usecase "UC-51 Modifier un utilisateur"     as UC51
+    usecase "UC-52 Desactiver un utilisateur"   as UC52
+    usecase "UC-53 Attribuer un role"           as UC53
+    usecase "UC-54 Tableau de bord"             as UC54
+  }
+
+  package "Systeme" {
+    usecase "UC-90 Seed initial comptes"        as UC90
+    usecase "UC-91 Rotation / revocation refresh" as UC91
+  }
+}
+
+' --- Relations acteur -> UC (via heritage, chaque sous-acteur recoit les UC du parent)
+Etudiant --> UC01
+Etudiant --> UC02
+Etudiant --> UC03
+Etudiant --> UC04
+Etudiant --> UC05
+Etudiant --> UC06
+Etudiant --> UC10
+Etudiant --> UC12
+Etudiant --> UC13
+Etudiant --> UC14
+Etudiant --> UC15
+Etudiant --> UC17
+Etudiant --> UC18
+Etudiant --> UC19
+Etudiant --> UC20
+Etudiant --> UC21
+Etudiant --> UC22
+Etudiant --> UC30
+Etudiant --> UC31
+Etudiant --> UC32
+Etudiant --> UC40
+Etudiant --> UC46
+
+Enseignant --> UC41
+Enseignant --> UC42
+Enseignant --> UC43
+Enseignant --> UC44
+Enseignant --> UC45
+
+Admin --> UC50
+Admin --> UC51
+Admin --> UC52
+Admin --> UC53
+Admin --> UC54
+
+Systeme --> UC90
+Systeme --> UC91
+
+' --- Relations UC <-> UC
+UC12 ..> UC11 : <<include>>
+UC13 ..> UC11 : <<include>>
+UC12 ..> UC30 : <<include>>
+UC16 ..> UC15 : <<extend>>
+
+@enduml

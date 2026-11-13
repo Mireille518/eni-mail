@@ -1,0 +1,26 @@
+@startuml restore-message
+!include ../_style.iuml
+title Sequence — Restauration depuis la corbeille
+
+actor "Utilisateur" as U
+participant "MessageViewPage" as UI
+participant "MessageController" as CTL
+participant "MessageService" as S
+participant "MessageRepository" as MR
+
+U -> UI : Clic "Restaurer"
+UI -> CTL : POST /api/messages/{id}/restore
+CTL -> S : restore(id, user)
+S -> MR : findById(id)
+MR --> S : Message
+S -> S : assertCanAccess
+opt user est sender
+  S -> MR : restoreSender(id, SENT)\n{senderFolder=SENT, senderDeleted=false}
+end
+opt user est destinataire
+  S -> MR : restoreRecipient(id, userId, INBOX)\n{recipients.$.folder=INBOX,\nrecipients.$.deleted=false}
+end
+S --> CTL : void
+CTL --> UI : 204
+
+@enduml

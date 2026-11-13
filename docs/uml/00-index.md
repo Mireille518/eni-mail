@@ -86,7 +86,18 @@ Légende : ✅ Implémenté — ⚠️ Partiellement implémenté — 🚧 En co
 
 ---
 
-## 5. Entrée dans le code
+## 5. Figures UML rendues
+
+Chaque fichier de ce dossier embarque désormais les **diagrammes rendus par PlantUML** (format figure PNG + SVG vectoriel + source `.puml` modifiable), en plus du bloc Mermaid d'origine pour l'édition rapide sur GitHub.
+
+- **36 figures PNG** + **36 figures SVG** générées.
+- **Sources PlantUML** : [`sources/`](sources/) (style commun [`sources/_style.iuml`](sources/_style.iuml)).
+- **Images rendues** : [`diagrams/png/`](diagrams/png/) et [`diagrams/svg/`](diagrams/svg/).
+- **Guide de régénération** : [`diagrams/README.md`](diagrams/README.md).
+
+Les diagrammes suivent le style **Visual Paradigm** : fond blanc, palette sobre (bleus marine), formes UML conventionnelles (acteurs stick, classes compartimentées, flèches UML standards), moteur de layout **Smetana** (pas de dépendance Graphviz).
+
+## 6. Entrée dans le code
 
 Pour chaque élément UML, vous retrouverez un lien direct vers le fichier source correspondant, par exemple :
 
@@ -95,3 +106,8 @@ Pour chaque élément UML, vous retrouverez un lien direct vers le fichier sourc
 - Page de connexion React : [eni-mail-frontend/src/features/auth/LoginPage.tsx](../../eni-mail-frontend/src/features/auth/LoginPage.tsx)
 
 Cela permet de valider que chaque diagramme reflète bien le code réel.
+
+
+
+back .\mvnw.cmd spring-boot:run
+front npm run dev

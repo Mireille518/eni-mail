@@ -1,0 +1,34 @@
+@startuml admin-dashboard
+!include ../_style.iuml
+title Sequence — Tableau de bord administrateur
+
+actor "Admin" as A
+participant "AdminDashboard" as UI
+participant "AdminController" as CTL
+participant "AdminStatsService" as S
+participant "UserRepository" as UR
+participant "MongoTemplate" as MT
+
+A -> UI : Ouvre /admin
+UI -> CTL : GET /api/admin/stats
+CTL -> S : build()
+par
+  S -> UR : count()
+else
+  S -> UR : countByRole(ROLE_ETUDIANT)
+else
+  S -> UR : countByRole(ROLE_ENSEIGNANT)
+else
+  S -> UR : countByRole(ROLE_ADMIN)
+else
+  S -> MT : count(messages where draft=false)
+else
+  S -> MT : count(groups)
+else
+  S -> MT : count(users where status=ACTIVE)
+end
+S --> CTL : AdminStatsDto
+CTL --> UI : 200 + 7 KPI
+UI --> A : 7 tuiles
+
+@enduml

@@ -14,7 +14,17 @@ Les diagrammes sont en Mermaid (notation `classDiagram` adaptée pour représent
 
 ---
 
-## 2. Scénario 1 — Seed initial
+## 2. Représentation graphique principale (PlantUML)
+
+![Diagramme d'objets — envoi au groupe M1 GLBD](diagrams/png/object-diagram.png)
+
+**Figure 4.1 — Diagramme d'objets : scénario d'envoi à un groupe.**
+
+> Source éditable : [`sources/object-diagram.puml`](sources/object-diagram.puml) · Version vectorielle : [SVG](diagrams/svg/object-diagram.svg).
+
+Les sections suivantes détaillent plusieurs scénarios additionnels en Mermaid.
+
+## 3. Scénario 1 — Seed initial
 
 Au premier démarrage, `DataInitializer` crée 7 utilisateurs. Instantané juste après le seed :
 

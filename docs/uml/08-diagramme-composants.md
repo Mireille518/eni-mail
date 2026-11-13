@@ -10,6 +10,16 @@ Un composant est une unité de livraison avec des **interfaces requises** (ce do
 
 ## 2. Vue générale
 
+### Représentation graphique (PlantUML)
+
+![Diagramme de composants ENI Mail](diagrams/png/component-diagram.png)
+
+**Figure 8.1 — Composants logiciels et interfaces d'ENI Mail.**
+
+> Source éditable : [`sources/component-diagram.puml`](sources/component-diagram.puml) · Version vectorielle : [SVG](diagrams/svg/component-diagram.svg).
+
+### Équivalent Mermaid
+
 ```mermaid
 flowchart TB
     subgraph Client["Navigateur"]

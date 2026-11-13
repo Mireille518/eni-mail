@@ -1,0 +1,36 @@
+@startuml delete-permanent
+!include ../_style.iuml
+title Sequence — Suppression definitive
+
+actor "Utilisateur" as U
+participant "MessageViewPage\n(ConfirmDialog)" as UI
+participant "MessageController" as CTL
+participant "MessageService" as S
+participant "MessageRepository" as MR
+
+U -> UI : Clic "Supprimer definitivement"
+UI -> U : Dialogue de confirmation
+U -> UI : "Supprimer definitivement"
+UI -> CTL : DELETE /api/messages/{id}/permanent
+CTL -> S : deletePermanent(id, user)
+S -> MR : findById(id)
+MR --> S : Message
+S -> S : marque la vue de user :\nsender ET/OU recipient = deleted
+S -> S : someoneStillSees =\n!senderDeleted OR\nany(recipient !deleted)
+alt someoneStillSees
+  S -> MR : save(message)
+  note right of MR
+    Document conserve pour
+    les autres acteurs
+  end note
+else personne
+  S -> MR : deleteById(id)
+  note right of MR
+    Document physiquement
+    supprime
+  end note
+end
+S --> CTL : void
+CTL --> UI : 204
+
+@enduml

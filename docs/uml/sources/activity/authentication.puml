@@ -1,0 +1,33 @@
+@startuml authentication-activity
+!include ../_style.iuml
+title Activite — Processus d'authentification
+
+start
+:Afficher LoginPage;
+:Saisie email + mot de passe;
+if (validation Zod ?) then (invalide)
+  :Afficher erreur champ;
+  stop
+else (valide)
+  :POST /api/auth/login;
+  if (compte verrouille ?) then (oui)
+    :429 TOO_MANY_REQUESTS;
+    stop
+  else (non)
+    if (utilisateur ACTIVE et mot de passe OK ?) then (non)
+      :onFailure(email);
+      :401 BAD_CREDENTIALS;
+      stop
+    else (oui)
+      :onSuccess(email);
+      :Generation access + refresh;
+      :Persistance RefreshToken hash;
+      :Set-Cookie eni_refresh HttpOnly;
+      :200 + accessToken + user;
+      :AuthContext.setUser + setAccessToken;
+      :Navigation /inbox;
+    endif
+  endif
+endif
+stop
+@enduml

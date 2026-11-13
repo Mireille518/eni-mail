@@ -10,6 +10,16 @@ Ce document décrit l'organisation logique du code source — **packages Java** 
 
 **Racine** : `mg.eni.email` dans [eni-mail-back/src/main/java/](../../eni-mail-back/src/main/java/mg/eni/email/).
 
+### Représentation graphique (PlantUML)
+
+![Diagramme de packages backend](diagrams/png/package-diagram.png)
+
+**Figure 10.1 — Organisation des packages Java du backend.**
+
+> Source éditable : [`sources/package-diagram.puml`](sources/package-diagram.puml) · Version vectorielle : [SVG](diagrams/svg/package-diagram.svg).
+
+### Équivalent Mermaid
+
 ```mermaid
 flowchart TB
     subgraph Root["mg.eni.email"]
