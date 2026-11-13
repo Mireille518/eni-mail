@@ -5,6 +5,7 @@ import {
 import { useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Avatar } from '../components/ui/Avatar'
+import { ConfirmDialog } from '../components/ui/ConfirmDialog'
 import { Logo } from '../components/ui/Logo'
 import { useAuth } from '../contexts/AuthContext'
 import { folderCounts } from '../services/messagesApi'
@@ -13,6 +14,8 @@ import { cn } from '../lib/cn'
 export function AppLayout() {
   const { user, logout, hasRole } = useAuth()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [confirmLogout, setConfirmLogout] = useState(false)
+  const [loggingOut, setLoggingOut] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -170,7 +173,7 @@ export function AppLayout() {
           <button
             type="button"
             className="btn-ghost mt-1 w-full justify-start text-xs"
-            onClick={() => logout()}
+            onClick={() => setConfirmLogout(true)}
           >
             <LogOut className="h-4 w-4" />
             Se deconnecter
@@ -220,6 +223,29 @@ export function AppLayout() {
           <Outlet />
         </main>
       </div>
+
+      <ConfirmDialog
+        open={confirmLogout}
+        title="Confirmer la deconnexion"
+        description="Voulez-vous vraiment vous deconnecter de votre compte ENI Mail ?"
+        confirmLabel={loggingOut ? 'Deconnexion...' : 'Oui, me deconnecter'}
+        cancelLabel="Rester connecte"
+        onCancel={() => {
+          if (loggingOut) return
+          setConfirmLogout(false)
+        }}
+        onConfirm={async () => {
+          if (loggingOut) return
+          setLoggingOut(true)
+          try {
+            await logout()
+            setConfirmLogout(false)
+            navigate('/login', { replace: true })
+          } finally {
+            setLoggingOut(false)
+          }
+        }}
+      />
     </div>
   )
 }

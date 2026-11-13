@@ -17,7 +17,7 @@ import {
   moveToTrash,
   restoreMessage,
 } from '../../services/messagesApi'
-import { attachmentDownloadUrl } from '../../services/attachmentsApi'
+import { downloadAttachment } from '../../services/attachmentsApi'
 import { formatFileSize, formatFull } from '../../lib/format'
 
 export function MessageViewPage() {
@@ -25,7 +25,9 @@ export function MessageViewPage() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const qc = useQueryClient()
+  const [confirmTrash, setConfirmTrash] = useState(false)
   const [confirmPermanent, setConfirmPermanent] = useState(false)
+  const [downloadingId, setDownloadingId] = useState<string | null>(null)
 
   const { data: message, isLoading, error } = useQuery({
     queryKey: ['message', id],
@@ -135,7 +137,7 @@ export function MessageViewPage() {
             </button>
           </>
         ) : (
-          <button className="btn-danger" onClick={() => trashM.mutate()}>
+          <button className="btn-danger" onClick={() => setConfirmTrash(true)}>
             <Trash2 className="h-4 w-4" /> Supprimer
           </button>
         )}
@@ -176,31 +178,64 @@ export function MessageViewPage() {
               Pieces jointes ({message.attachments.length})
             </h2>
             <ul className="space-y-2">
-              {message.attachments.map((a) => (
-                <li key={a.id}>
-                  <a
-                    href={attachmentDownloadUrl(a.id)}
-                    className="flex items-center justify-between rounded-md border border-[color:var(--color-border)] bg-white px-3 py-2 text-sm hover:bg-[color:var(--color-surface-muted)]"
-                    download={a.filename}
-                  >
-                    <span className="truncate">{a.filename}</span>
-                    <span className="flex items-center gap-2 text-xs text-[color:var(--color-ink-muted)]">
-                      {formatFileSize(a.size)}
-                      <Download className="h-4 w-4" />
-                    </span>
-                  </a>
-                </li>
-              ))}
+              {message.attachments.map((a) => {
+                const busy = downloadingId === a.id
+                return (
+                  <li key={a.id}>
+                    <button
+                      type="button"
+                      className="flex w-full items-center justify-between rounded-md border border-[color:var(--color-border)] bg-white px-3 py-2 text-left text-sm hover:bg-[color:var(--color-surface-muted)] disabled:opacity-60 disabled:cursor-wait"
+                      disabled={busy}
+                      onClick={async () => {
+                        if (downloadingId) return
+                        setDownloadingId(a.id)
+                        try {
+                          await downloadAttachment(a.id, a.filename)
+                        } catch (e) {
+                          toast.error(apiErrorMessage(e, 'Telechargement impossible'))
+                        } finally {
+                          setDownloadingId(null)
+                        }
+                      }}
+                      title={`Telecharger ${a.filename}`}
+                    >
+                      <span className="flex min-w-0 items-center gap-2">
+                        <Paperclip className="h-4 w-4 shrink-0 text-[color:var(--color-ink-subtle)]" />
+                        <span className="truncate font-medium">{a.filename}</span>
+                      </span>
+                      <span className="flex items-center gap-3 text-xs text-[color:var(--color-ink-muted)]">
+                        <span className="tabular-nums">{formatFileSize(a.size)}</span>
+                        {busy ? <Spinner className="h-4 w-4" /> : <Download className="h-4 w-4" />}
+                      </span>
+                    </button>
+                  </li>
+                )
+              })}
             </ul>
           </section>
         )}
       </article>
 
       <ConfirmDialog
+        open={confirmTrash}
+        title="Supprimer ce message ?"
+        description="Voulez-vous vraiment deplacer ce message vers la corbeille ? Vous pourrez le restaurer ulterieurement."
+        confirmLabel="Oui, supprimer"
+        cancelLabel="Annuler"
+        danger
+        onCancel={() => setConfirmTrash(false)}
+        onConfirm={() => {
+          setConfirmTrash(false)
+          trashM.mutate()
+        }}
+      />
+
+      <ConfirmDialog
         open={confirmPermanent}
-        title="Supprimer definitivement ?"
-        description="Cette action est irreversible. Le message sera supprime de votre corbeille."
-        confirmLabel="Supprimer"
+        title="Supprimer definitivement ce message ?"
+        description="Cette action est irreversible. Le message sera definitivement supprime de votre corbeille. Voulez-vous continuer ?"
+        confirmLabel="Supprimer definitivement"
+        cancelLabel="Annuler"
         danger
         onCancel={() => setConfirmPermanent(false)}
         onConfirm={() => {
